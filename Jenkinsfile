@@ -9,17 +9,15 @@ pipeline{
                         sh './gradlew sonarqube'
    
                 }
-
+                        timeout(time: 1, unit: 'HOURS') {
+                      def qg = waitForQualityGate()
+                      if (qg.status != 'OK') {
+                           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                      }
                 }
             }
 
         }
-        stage("Sonar Quality Gate status"){
-            steps{
-                script{
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
-                }
-            }
-        }
+        
     }
 }
