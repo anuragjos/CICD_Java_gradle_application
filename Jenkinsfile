@@ -12,5 +12,12 @@ pipeline{
                 }
             }
         }
+        stage("Sonar Quality Gate Status"){
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-auth'
+                }
+            }
+        }
     }
 }
